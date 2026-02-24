@@ -1,0 +1,14 @@
+{
+  "matchups": [
+    {
+      "round": 1,
+      "round_name": "Round of 64",
+      "region": "East",
+      "game_number": 1,
+      "team_a_id": 1,
+      "team_b_id": 2,
+      "team_a_seed": 1,
+      "team_b_seed": 16
+    }
+  ]
+}

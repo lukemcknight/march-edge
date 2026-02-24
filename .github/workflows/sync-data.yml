@@ -1,0 +1,39 @@
+name: Sync College Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 13 * * *'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run data sync
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DATA_PROVIDER: sportsdataio
+          SPORTSDATAIO_API_KEY: ${{ secrets.SPORTSDATAIO_API_KEY }}
+          SPORTSDATAIO_BASE_URL: ${{ secrets.SPORTSDATAIO_BASE_URL }}
+          SPORTSDATAIO_SEASON: ${{ secrets.SPORTSDATAIO_SEASON }}
+          SPORTSDATAIO_TEAMS_PATH: ${{ secrets.SPORTSDATAIO_TEAMS_PATH }}
+          SPORTSDATAIO_STANDINGS_PATH: ${{ secrets.SPORTSDATAIO_STANDINGS_PATH }}
+          SPORTSDATAIO_GAMES_PATH: ${{ secrets.SPORTSDATAIO_GAMES_PATH }}
+          SYNC_TOURNAMENT_ONLY: 'true'
+          SYNC_REQUIRE_SEED: 'true'
+          SYNC_TEAM_LIMIT: '68'
+          SYNC_PRUNE_MATCHUPS: 'true'
+        run: npm run sync:data
